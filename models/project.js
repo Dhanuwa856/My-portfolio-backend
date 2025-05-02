@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
+    project_id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
     title: {
       type: String,
       required: true,
@@ -28,6 +33,7 @@ const projectSchema = new mongoose.Schema(
       type: [String],
     },
   },
+
   {
     timestamps: true, // automatically adds createdAt and updatedAt
   }

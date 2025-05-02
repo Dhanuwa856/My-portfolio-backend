@@ -18,7 +18,6 @@ export const createProject = async (req, res) => {
       !title ||
       !main_img ||
       !description ||
-      !tags ||
       !Array.isArray(tags) ||
       tags.length === 0
     ) {
@@ -28,8 +27,14 @@ export const createProject = async (req, res) => {
       });
     }
 
+    // Determine next project_id
+    const lastProject = await Project.findOne().sort({ project_id: -1 });
+    const nextId =
+      lastProject && lastProject.project_id ? lastProject.project_id + 1 : 1;
+
     // Create and save project
     const project = new Project({
+      project_id: nextId,
       title,
       main_img,
       demo_url,
@@ -47,9 +52,25 @@ export const createProject = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating project:", error);
-    // Detailed error response
     return res.status(500).json({
       message: "Server error while creating project",
+      error: error.message,
+    });
+  }
+};
+
+// Get all projects
+export const getAllProjects = async (req, res) => {
+  try {
+    const projects = await Project.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      message: "Projects fetched successfully",
+      projects,
+    });
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    return res.status(500).json({
+      message: "Server error while fetching projects",
       error: error.message,
     });
   }
