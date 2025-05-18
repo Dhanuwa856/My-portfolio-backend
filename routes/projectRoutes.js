@@ -6,10 +6,11 @@ import {
   getProjectById,
   updateProject,
 } from "../Controllers/projectController.js";
+import { requireRole, verifyToken } from "../middlewares/auth.js";
 
 const projectRouter = express.Router();
 
-projectRouter.post("/", createProject);
+projectRouter.post("/", verifyToken, requireRole("admin"), createProject);
 projectRouter.get("/", getAllProjects);
 projectRouter.get("/:id", getProjectById);
 projectRouter.put("/:id", updateProject);
