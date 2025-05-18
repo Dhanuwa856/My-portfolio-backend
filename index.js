@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import projectRouter from "./routes/projectRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ mongoose.connect(connectionString).then(
 );
 
 app.use("/api/projects", projectRouter); // Use the project router for all routes starting with /api/projects
+app.use("/api/users", userRouter); // Use the user router for all routes starting with /api/users
 
 app.listen(process.env.PORT || 5000, (req, res) => {
   console.log("Server is running on port 5000");
